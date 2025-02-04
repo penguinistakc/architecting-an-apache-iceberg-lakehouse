@@ -32,3 +32,23 @@ conf = (
 ## START SPARK SESSION
 spark = SparkSession.builder.config(conf=conf).getOrCreate()
 print("Spark Running")
+
+# Define the JDBC connection properties
+jdbc_url = "jdbc:postgresql://postgres:5432/mydb"
+properties = {
+    "user": "myuser",
+    "password": "mypassword",
+    "driver": "org.postgresql.Driver"
+}
+
+# Read the sales_data table from Postgres into a Spark DataFrame
+sales_df = spark.read.jdbc(url=jdbc_url, table="sales_data", properties=properties)
+
+# Show the first few rows of the dataset
+sales_df.show()
+
+# Write the DataFrame to an Iceberg table in the Nessie catalog
+sales_df.writeTo("nessie.sales.sales_data").createOrReplace()
+
+# Verify that the data was written to Iceberg by reading the table
+spark.read.table("nessie.sales.sales_data").show()
