@@ -38,7 +38,7 @@ services:
 
   # Spark (Data Processing & Ingestion)
   spark:
-    image: alexmerced/spark35notebook:latest
+    image: alexmerced/spark35nb:latest
     container_name: spark
     networks:
       lakehouse-net:
