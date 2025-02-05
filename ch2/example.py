@@ -47,6 +47,9 @@ sales_df = spark.read.jdbc(url=jdbc_url, table="sales_data", properties=properti
 # Show the first few rows of the dataset
 sales_df.show()
 
+#Create a namespace
+spark.sql("CREATE NAMESPACE nessie.sales;")
+
 # Write the DataFrame to an Iceberg table in the Nessie catalog
 sales_df.writeTo("nessie.sales.sales_data").createOrReplace()
 
