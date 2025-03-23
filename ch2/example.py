@@ -42,16 +42,16 @@ properties = {
 }
 
 # Read the sales_data table from Postgres into a Spark DataFrame
-sales_df = spark.read.jdbc(url=jdbc_url, table="sales_data", properties=properties)
+sales_df = spark.read.jdbc(url=jdbc_url, table="fashion_sales", properties=properties)
 
 # Show the first few rows of the dataset
 sales_df.show()
 
 #Create a namespace
-spark.sql("CREATE NAMESPACE nessie.sales;")
+spark.sql("CREATE NAMESPACE IF NOT EXISTS nessie.sales;")
 
 # Write the DataFrame to an Iceberg table in the Nessie catalog
-sales_df.writeTo("nessie.sales.sales_data").createOrReplace()
+sales_df.writeTo("nessie.sales.fashion_sales").createOrReplace()
 
 # Verify that the data was written to Iceberg by reading the table
-spark.read.table("nessie.sales.sales_data").show()
+spark.read.table("nessie.sales.fashion_sales").show()
